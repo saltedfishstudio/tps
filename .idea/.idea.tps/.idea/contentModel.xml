@@ -2,14 +2,21 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Github\tps" t="IncludeRecursive">
-      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Source" t="Include">
           <e p="Runtime" t="Include">
+            <e p="Core" t="Include">
+              <e p="Epic.Core.asmdef" t="Include" />
+              <e p="UnrealObject.cs" t="Include" />
+              <e p="UnrealObjectBase.cs" t="Include" />
+              <e p="UnrealObjectBaseUtility.cs" t="Include" />
+            </e>
             <e p="Engine" t="Include">
               <e p="GameFramework" t="Include">
                 <e p="Actor.cs" t="Include" />
-                <e p="EPlaneConstraintAxisSetting.cs" t="Include" />
+                <e p="ActorComponent.cs" t="Include" />
+                <e p="EngineTypes.cs" t="Include" />
+                <e p="Epic.Engine.GameFramework.asmdef" t="Include" />
                 <e p="Movement.cs" t="Include" />
                 <e p="NavMovement.cs" t="Include" />
                 <e p="Pawn.cs" t="Include" />
@@ -19,6 +26,8 @@
           </e>
         </e>
       </e>
+      <e p="Epic.Core.csproj" t="IncludeRecursive" />
+      <e p="Epic.Engine.GameFramework.csproj" t="IncludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="Packages" t="ExcludeRecursive" />
       <e p="Temp\bin" t="ExcludeRecursive" />

@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Epic.Engine.GameFramework
 {
-	public abstract class Movement : MonoBehaviour
+	[System.Serializable]
+	public abstract class Movement : ActorComponent
 	{
 		/** Current velocity of updated component. */
 		public Vector3 velocity = default;

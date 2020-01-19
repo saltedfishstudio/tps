@@ -1,0 +1,15 @@
+{
+    "name": "Epic.Engine.GameFramework",
+    "references": [
+        "GUID:9a6b034103667a8459052990a0762675"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

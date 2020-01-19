@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Epic.Core;
 
 namespace Epic.Engine.GameFramework
 {
-    public class Actor : MonoBehaviour
+    public class Actor : UnrealObject
     {
 
     }
