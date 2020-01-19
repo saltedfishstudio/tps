@@ -2,11 +2,16 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Github\tps" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Source" t="Include">
           <e p="Runtime" t="Include">
+            <e p="Attribute" t="Include">
+              <e p="UPropertyAttribute.cs" t="Include" />
+            </e>
             <e p="Core" t="Include">
               <e p="Epic.Core.asmdef" t="Include" />
+              <e p="ObjectMacros.cs" t="Include" />
               <e p="UnrealObject.cs" t="Include" />
               <e p="UnrealObjectBase.cs" t="Include" />
               <e p="UnrealObjectBaseUtility.cs" t="Include" />
@@ -15,6 +20,7 @@
               <e p="GameFramework" t="Include">
                 <e p="Actor.cs" t="Include" />
                 <e p="ActorComponent.cs" t="Include" />
+                <e p="EngineBaseTypes.cs" t="Include" />
                 <e p="EngineTypes.cs" t="Include" />
                 <e p="Epic.Engine.GameFramework.asmdef" t="Include" />
                 <e p="Movement.cs" t="Include" />

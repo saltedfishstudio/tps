@@ -28,6 +28,11 @@ namespace Epic.Engine.GameFramework
 		bool inInitializedComponent = false;
 		EPlaneConstraintAxisSetting planeConstraintAxisSetting = default;
 
+		public Movement()
+		{
+			// primaryComponentTick
+		}
+
 		/// <summary>
 		/// Helper to compute the plane constraint axis from the current setting.
 		/// </summary>
@@ -41,7 +46,7 @@ namespace Epic.Engine.GameFramework
 		#region Actor Component Interface
 
 		public virtual void TickComponent(float deltaTime, ELevelTick ParticleSystemAnimationType,
-			ActorComponentTickFunction thisTickFunction)
+			FActorComponentTickFunction thisTickFunction)
 		{
 			throw new NotImplementedException();
 		}
@@ -456,8 +461,88 @@ namespace Epic.Engine.GameFramework
 		public float Roll;
 	}
 
-	public struct ActorComponentTickFunction
+	public class FActorComponentTickFunction
 	{
+		
+	}
+
+	public class FTickFunction
+	{
+		public ETickingGroup tickGroup = default;
+		public ETickingGroup endTickGroup = default;
+
+		public sbyte tickEvenWhenPaused = 1;
+		public sbyte canEverTick = 1;
+		public sbyte startWithTickEnabled = 1;
+		public 		sbyte allowTickOnDedicatedServer = 1;
+		public sbyte highPriority = 1;
+		public sbyte runOnAnyThread = 1;
+
+		enum ETickState : sbyte
+		{
+			Disabled,
+			Enabled,
+			CoolingDown,
+		}
+
+		ETickState tickState = default;
+		public float tickInterval = default;
+		FTickPrerequisite prerequisites = default;
+		
+		class FInternalData
+		{
+			/** Whether the tick function is registered. */
+			public bool bRegistered = true;
+
+			/** Cache whether this function was rescheduled as an interval function during StartParallel */
+			public bool bWasInterval = true;
+
+			/** Internal data that indicates the tick group we actually started in (it may have been delayed due to prerequisites) **/
+			public ETickingGroup ActualStartTickGroup;
+
+			/** Internal data that indicates the tick group we actually started in (it may have been delayed due to prerequisites) **/
+			public ETickingGroup ActualEndTickGroup;
+		
+			/** Internal data to track if we have started visiting this tick function yet this frame **/
+			public int TickVisitedGFrameCounter;
+
+			/** Internal data to track if we have finshed visiting this tick function yet this frame **/
+			public int TickQueuedGFrameCounter;
+
+			/** Pointer to the task, only used during setup. This is often stale. **/
+			public Action TaskPointer;
+
+			/** The next function in the cooling down list for ticks with an interval*/
+			public FTickFunction Next;
+
+			/** 
+		 * If TickFrequency is greater than 0 and tick state is CoolingDown, this is the time, 
+		 * relative to the element ahead of it in the cooling down list, remaining until the next time this function will tick 
+		 **/
+			public float RelativeTickCooldown;
+
+			/** 
+		 * The last world game time at which we were ticked. Game time used is dependent on bTickEvenWhenPaused
+		 * Valid only if we've been ticked at least once since having a tick interval; otherwise set to -1.f
+		 **/
+			public float LastTickGameTimeSeconds;
+
+			/** Back pointer to the FTickTaskLevel containing this tick function if it is registered **/
+			public FTickTaskLevel TickTaskLevel;
+		};
+
+		/** Lazily allocated struct that contains the necessary data for a tick function that is registered. **/
+		FInternalData internalData;
+	}
+
+	public class FTickTaskLevel
+	{
+		
+	}
+
+	public struct FTickPrerequisite
+	{
+		
 	}
 
 	public struct PropertyChangedEvent
