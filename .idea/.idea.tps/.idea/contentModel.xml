@@ -23,6 +23,8 @@
                 <e p="EngineBaseTypes.cs" t="Include" />
                 <e p="EngineTypes.cs" t="Include" />
                 <e p="Epic.Engine.GameFramework.asmdef" t="Include" />
+                <e p="INavAgentInterface.cs" t="Include" />
+                <e p="IPathFollowingAgentInterface.cs" t="Include" />
                 <e p="Movement.cs" t="Include" />
                 <e p="NavMovement.cs" t="Include" />
                 <e p="Pawn.cs" t="Include" />
