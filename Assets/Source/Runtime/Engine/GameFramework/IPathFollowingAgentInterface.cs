@@ -7,6 +7,6 @@ namespace Epic.Engine.GameFramework
 		void OnUnableToMove(UnrealObject instigator);
 		void OnStartedFalling();
 		void OnLanded();
-		void OnMoveBlockedBy(HitResult blockingImpact);
+		void OnMoveBlockedBy(FHitResult blockingImpact);
 	}
 }

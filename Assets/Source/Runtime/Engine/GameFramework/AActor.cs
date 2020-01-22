@@ -2,7 +2,7 @@
 
 namespace Epic.Engine.GameFramework
 {
-    public class Actor : UnrealObject
+    public class AActor : UnrealObject
     {
 
     }

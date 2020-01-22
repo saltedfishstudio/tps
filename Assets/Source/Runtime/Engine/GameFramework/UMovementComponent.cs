@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Epic.Engine.GameFramework
 {
 	[System.Serializable]
-	public abstract class Movement : ActorComponent
+	public abstract class UMovementComponent : UActorComponent
 	{
 		/** Current velocity of updated component. */
 		public Vector3 velocity = default;
@@ -28,7 +28,7 @@ namespace Epic.Engine.GameFramework
 		bool inInitializedComponent = false;
 		EPlaneConstraintAxisSetting planeConstraintAxisSetting = default;
 
-		public Movement()
+		public UMovementComponent()
 		{
 			// primaryComponentTick
 		}
@@ -158,7 +158,7 @@ namespace Epic.Engine.GameFramework
 	 *		  be sure to handle that.
 	 * @param MoveDelta: Attempted move that resulted in the hit.
 	 */
-		public virtual void HandleImpact(HitResult hit, float timeSlice, Vector3 moveDelta)
+		public virtual void HandleImpact(FHitResult hit, float timeSlice, Vector3 moveDelta)
 		{
 			throw new NotImplementedException();
 		}
@@ -188,19 +188,19 @@ namespace Epic.Engine.GameFramework
 	 * @return True if some movement occurred, false if no movement occurred. Result of any impact will be stored in OutHit.
 	 */
 		public bool MoveUpdatedComponent(Vector3 delta, Quaternion newRotation, bool
-			sweep, HitResult outHit = default, ETeleportType teleport = ETeleportType.None)
+			sweep, FHitResult outHit = default, ETeleportType teleport = ETeleportType.None)
 		{
 			throw new NotImplementedException();
 		}
 
 		public bool MoveUpdatedComponent(Vector3 delta, Rotator newRotation, bool
-			sweep, HitResult outHit = default, ETeleportType teleport = ETeleportType.None)
+			sweep, FHitResult outHit = default, ETeleportType teleport = ETeleportType.None)
 		{
 			throw new NotImplementedException();
 		}
 
 		protected virtual bool MoveUpdatedComponentImpl(Vector3 Delta, Quaternion NewRotation, bool bSweep,
-			HitResult OutHit = default, ETeleportType Teleport = ETeleportType.None)
+			FHitResult OutHit = default, ETeleportType Teleport = ETeleportType.None)
 		{
 			throw new NotImplementedException();
 		}
@@ -210,7 +210,7 @@ namespace Epic.Engine.GameFramework
 	 * Respects the plane constraint, if enabled.
 	 * @return True if some movement occurred, false if no movement occurred. Result of any impact will be stored in OutHit.
 	 */
-		public bool K2_MoveUpdatedComponent(Vector3 Delta, Rotator NewRotation, HitResult OutHit, bool bSweep = true,
+		public bool K2_MoveUpdatedComponent(Vector3 Delta, Rotator NewRotation, FHitResult OutHit, bool bSweep = true,
 			bool bTeleport = false)
 		{
 			throw new NotImplementedException();
@@ -223,13 +223,13 @@ namespace Epic.Engine.GameFramework
 	 * @note The 'Teleport' flag is currently always treated as 'None' (not teleporting) when used in an active FScopedMovementUpdate.
 	 * @return result of the final MoveUpdatedComponent() call.
 	 */
-		bool SafeMoveUpdatedComponent(Vector3 Delta, Quaternion NewRotation, bool bSweep, HitResult OutHit,
+		bool SafeMoveUpdatedComponent(Vector3 Delta, Quaternion NewRotation, bool bSweep, FHitResult OutHit,
 			ETeleportType Teleport = ETeleportType.None)
 		{
 			throw new NotImplementedException();
 		}
 
-		bool SafeMoveUpdatedComponent(Vector3 Delta, Rotator NewRotation, bool bSweep, HitResult OutHit,
+		bool SafeMoveUpdatedComponent(Vector3 Delta, Rotator NewRotation, bool bSweep, FHitResult OutHit,
 			ETeleportType Teleport = ETeleportType.None)
 		{
 			throw new NotImplementedException();
@@ -240,7 +240,7 @@ namespace Epic.Engine.GameFramework
 	 * @param Hit the result of the failed move
 	 * @return The adjustment to use after a failed move, or a zero vector if no attempt should be made.
 	 */
-		public virtual Vector3 GetPenetrationAdjustment(HitResult Hit)
+		public virtual Vector3 GetPenetrationAdjustment(FHitResult Hit)
 		{
 			throw new NotImplementedException();
 		}
@@ -253,17 +253,17 @@ namespace Epic.Engine.GameFramework
 	 * @param Hit			The result of the failed move
 	 * @return True if the adjustment was successful and the original move should be retried, or false if no repeated attempt should be made.
 	 */
-		bool ResolvePenetration(Vector3 Adjustment, HitResult Hit, Quaternion NewRotation)
+		bool ResolvePenetration(Vector3 Adjustment, FHitResult Hit, Quaternion NewRotation)
 		{
 			throw new NotImplementedException();
 		}
 
-		bool ResolvePenetration(Vector3 Adjustment, HitResult Hit, Rotator NewRotation)
+		bool ResolvePenetration(Vector3 Adjustment, FHitResult Hit, Rotator NewRotation)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected virtual bool ResolvePenetrationImpl(Vector3 Adjustment, HitResult Hit, Quaternion NewRotation)
+		protected virtual bool ResolvePenetrationImpl(Vector3 Adjustment, FHitResult Hit, Quaternion NewRotation)
 		{
 			throw new NotImplementedException();
 		}
@@ -277,7 +277,7 @@ namespace Epic.Engine.GameFramework
 	 * @param Normal:	Normal opposed to movement. Not necessarily equal to Hit.Normal.
 	 * @param Hit:		HitResult of the move that resulted in the slide.
 	 */
-		public virtual Vector3 ComputeSlideVector(Vector3 Delta, float Time, Vector3 Normal, HitResult Hit)
+		public virtual Vector3 ComputeSlideVector(Vector3 Delta, float Time, Vector3 Normal, FHitResult Hit)
 		{
 			throw new NotImplementedException();
 		}
@@ -292,7 +292,7 @@ namespace Epic.Engine.GameFramework
 	 * @param bHandleImpact:	Whether to call HandleImpact on each hit.
 	 * @return The percentage of requested distance (Delta * Percent) actually applied (between 0 and 1). 0 if no movement occurred, non-zero if movement occurred.
 	 */
-		public virtual float SlideAlongSurface(Vector3 Delta, float Time, Vector3 Normal, HitResult Hit,
+		public virtual float SlideAlongSurface(Vector3 Delta, float Time, Vector3 Normal, FHitResult Hit,
 			bool bHandleImpact = false)
 		{
 			throw new NotImplementedException();
@@ -305,7 +305,7 @@ namespace Epic.Engine.GameFramework
 	 * @param OldHitNormal:	Normal of impact before last attempted move
 	 * @return Result in Delta that is the direction to move when contacting two surfaces.
 	 */
-		public virtual void TwoWallAdjust(Vector3 Delta, HitResult Hit, Vector3 OldHitNormal)
+		public virtual void TwoWallAdjust(Vector3 Delta, FHitResult Hit, Vector3 OldHitNormal)
 		{
 			throw new NotImplementedException();
 		}
@@ -445,7 +445,7 @@ namespace Epic.Engine.GameFramework
 		#endregion
 	}
 
-	public struct HitResult
+	public struct FHitResult
 	{
 	}
 
@@ -461,78 +461,11 @@ namespace Epic.Engine.GameFramework
 		public float Roll;
 	}
 
-	public class FActorComponentTickFunction
+	public class FActorComponentTickFunction : FTickFunction
 	{
+		public UActorComponent target;
 		
-	}
-
-	public class FTickFunction
-	{
-		public ETickingGroup tickGroup = default;
-		public ETickingGroup endTickGroup = default;
-
-		public sbyte tickEvenWhenPaused = 1;
-		public sbyte canEverTick = 1;
-		public sbyte startWithTickEnabled = 1;
-		public 		sbyte allowTickOnDedicatedServer = 1;
-		public sbyte highPriority = 1;
-		public sbyte runOnAnyThread = 1;
-
-		enum ETickState : sbyte
-		{
-			Disabled,
-			Enabled,
-			CoolingDown,
-		}
-
-		ETickState tickState = default;
-		public float tickInterval = default;
-		FTickPrerequisite prerequisites = default;
 		
-		class FInternalData
-		{
-			/** Whether the tick function is registered. */
-			public bool bRegistered = true;
-
-			/** Cache whether this function was rescheduled as an interval function during StartParallel */
-			public bool bWasInterval = true;
-
-			/** Internal data that indicates the tick group we actually started in (it may have been delayed due to prerequisites) **/
-			public ETickingGroup ActualStartTickGroup;
-
-			/** Internal data that indicates the tick group we actually started in (it may have been delayed due to prerequisites) **/
-			public ETickingGroup ActualEndTickGroup;
-		
-			/** Internal data to track if we have started visiting this tick function yet this frame **/
-			public int TickVisitedGFrameCounter;
-
-			/** Internal data to track if we have finshed visiting this tick function yet this frame **/
-			public int TickQueuedGFrameCounter;
-
-			/** Pointer to the task, only used during setup. This is often stale. **/
-			public Action TaskPointer;
-
-			/** The next function in the cooling down list for ticks with an interval*/
-			public FTickFunction Next;
-
-			/** 
-		 * If TickFrequency is greater than 0 and tick state is CoolingDown, this is the time, 
-		 * relative to the element ahead of it in the cooling down list, remaining until the next time this function will tick 
-		 **/
-			public float RelativeTickCooldown;
-
-			/** 
-		 * The last world game time at which we were ticked. Game time used is dependent on bTickEvenWhenPaused
-		 * Valid only if we've been ticked at least once since having a tick interval; otherwise set to -1.f
-		 **/
-			public float LastTickGameTimeSeconds;
-
-			/** Back pointer to the FTickTaskLevel containing this tick function if it is registered **/
-			public FTickTaskLevel TickTaskLevel;
-		};
-
-		/** Lazily allocated struct that contains the necessary data for a tick function that is registered. **/
-		FInternalData internalData;
 	}
 
 	public class FTickTaskLevel

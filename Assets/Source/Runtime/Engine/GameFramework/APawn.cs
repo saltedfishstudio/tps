@@ -2,19 +2,19 @@
 
 namespace Epic.Engine.GameFramework
 {
-    public class Pawn : Actor, INavAgentInterface
+    public class APawn : AActor, INavAgentInterface
     {
         public Vector3 GetNavAgentLocation()
         {
             throw new System.NotImplementedException();
         }
 
-        public Vector3 GetMoveGoalOffset(Actor movingActor)
+        public Vector3 GetMoveGoalOffset(AActor movingActor)
         {
             throw new System.NotImplementedException();
         }
 
-        public void GetMoveGoalReachTest(Actor movingActor, Vector3 moveOffset, Vector3 goalOffset, float goalRadius,
+        public void GetMoveGoalReachTest(AActor movingActor, Vector3 moveOffset, Vector3 goalOffset, float goalRadius,
             float goalHalfHeight)
         {
             throw new System.NotImplementedException();

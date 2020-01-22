@@ -3,7 +3,7 @@
 namespace Epic.Engine.GameFramework
 {
 	[System.Serializable]
-	public abstract class ActorComponent : UnrealObject
+	public abstract class UActorComponent : UnrealObject
 	{
 		public FActorComponentTickFunction primaryComponentTick;
 	}
