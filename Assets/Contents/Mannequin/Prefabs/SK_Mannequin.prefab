@@ -2288,6 +2288,10 @@ MonoBehaviour:
   animator: {fileID: 4510036764380940438}
   rigidBody: {fileID: 6492021859736972410}
   maxSpeed: 375
+  isDebugMode: 0
+  isInAirDebug: 0
+  speedDebug: 0
+  forcePowerDebug: 10
 --- !u!136 &390897557326948329
 CapsuleCollider:
   m_ObjectHideFlags: 0

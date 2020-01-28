@@ -128,6 +128,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3776424037661240577, guid: 3c0dcf06b4304c042a8fec77964155a6,
+        type: 3}
+      propertyPath: groundLayerMask.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4510036764380940438, guid: 3c0dcf06b4304c042a8fec77964155a6,
         type: 3}
       propertyPath: m_ApplyRootMotion

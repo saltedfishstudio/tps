@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UniRx;
+using UniRx.Triggers;
 
 namespace TPS.Anim
 {
@@ -30,8 +32,41 @@ namespace TPS.Anim
         [SerializeField] float speedDebug = default;
         [SerializeField] float forcePowerDebug = 10.0f;
 
+        [SerializeField] LayerMask groundLayerMask = default;
+        [SerializeField] int throttleFrame = 3;
+        [SerializeField] float groundTestRayLength = 0.1f;
+        bool isGrounded = default;
+
+        void Start()
+        {
+            Observable.EveryFixedUpdate()
+                .Select(u => isGrounded)
+                .DistinctUntilChanged()
+                .ThrottleFrame(3)
+                // .Where(x => x)
+                .Subscribe(OnStableGrounded);
+        }
+
+        void OnStableGrounded(bool onGround)
+        {
+            animator.SetBool(isInAir, onGround);
+        }
+
+        void ValidateGround()
+        {
+            if (Physics.Raycast(transform.position + Vector3.up * 0.02f, Vector3.down, groundTestRayLength, groundLayerMask))
+            {
+                isGrounded = true;
+                return;
+            }
+
+            isGrounded = false;
+        }
+
         void FixedUpdate()
         {
+            ValidateGround();
+            
             if (isDebugMode)
             {
                 if (isInAirDebug)
