@@ -38,6 +38,9 @@ namespace TPS
                 probe.radius = probeSize;
                 probe.isTrigger = true;
             }
+
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         void Update()
@@ -45,7 +48,7 @@ namespace TPS
             mouseX = Input.GetAxis(xAxisBinding);
             mouseY = Input.GetAxis(yAxisBinding);
             
-            transform.position = targetOffset;
+            transform.localPosition = target.transform.position + targetOffset;
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles +
                                                   new Vector3(-mouseY * mouseYControl, (mouseX * mouseXControl), 0));
             
@@ -57,12 +60,12 @@ namespace TPS
 
         void OnGUI()
         {
-            GUI.TextArea(
+            GUI.TextField(
                 new Rect(
                     padding.x, 
                     padding.y, 
                     400, 
-                    40)
+                    20)
                 , $"x:{mouseX}, y:{mouseY}");
         }
     }

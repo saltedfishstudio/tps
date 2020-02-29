@@ -260,9 +260,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetCamera: {fileID: 1723860435}
   target: {fileID: 2786200723685033794}
-  armLength: 3
+  targetArmLength: 3
   mouseXControl: 2
   mouseYControl: 2
+  useProbe: 0
+  probeSize: 0
   targetOffset: {x: 0, y: 0.97, z: 0}
 --- !u!1 &1442969636
 GameObject:
@@ -952,7 +954,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2786200723685033794}
   serializedVersion: 2
-  m_Mass: 100
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -1051,6 +1053,7 @@ GameObject:
   - component: {fileID: 1766068035140068245}
   - component: {fileID: 5008470188560365396}
   - component: {fileID: 1942561225342532807}
+  - component: {fileID: 2786200723685033795}
   m_Layer: 0
   m_Name: SK_Mannequin
   m_TagString: Untagged
@@ -1058,6 +1061,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &2786200723685033795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2786200723685033794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 252bfd2c587b4e3a943c00de7200049e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraBoom: {fileID: 636796285}
+  rigidBody: {fileID: 1942561225342532807}
+  animator: {fileID: 9114099077761243179}
+  turnSpeed: 10
+  speed: 10
+  threshold: 0.1
 --- !u!4 &2959142727484494881
 Transform:
   m_ObjectHideFlags: 0
@@ -3323,7 +3344,7 @@ Animator:
   m_GameObject: {fileID: 2786200723685033794}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 177735ac67d274c4eaa7ecfb0674412f, type: 3}
-  m_Controller: {fileID: 9100000, guid: 7e344014f0af2a14baf6fa14b9c7a82a, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3acd59001bc483e4098b77f5d9198d9a, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
