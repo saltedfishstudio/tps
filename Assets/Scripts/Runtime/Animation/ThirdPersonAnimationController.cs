@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 
@@ -10,8 +11,11 @@ namespace TPS.Anim
         [SerializeField] Animator animator = default;
         [SerializeField] Rigidbody rigidBody = default;
 
+        [SerializeField]
         float currentSpeed = default;
         [SerializeField] float maxSpeed = default;
+        [SerializeField] Renderer[] renderers = new Renderer[0];
+        [SerializeField] GameObject estimatedPosition = default;
 
         // Parameter
         static readonly int speedRatio = Animator.StringToHash(speedParameter);
@@ -35,51 +39,128 @@ namespace TPS.Anim
         [SerializeField] LayerMask groundLayerMask = default;
         [SerializeField] int throttleFrame = 3;
         [SerializeField] float groundTestRayLength = 0.1f;
+        
         bool isGrounded = default;
+        bool isJumping = false;
+        Action OnJumpKeyDown;
+        Action OnJumpKeyUp;
+        KeyCode jumpKey = KeyCode.Space;
 
         void Start()
         {
+            OnJumpKeyDown += OnJumpStart;
+            OnJumpKeyUp += OnJumpEnded;
+            
             Observable.EveryFixedUpdate()
                 .Select(u => isGrounded)
                 .DistinctUntilChanged()
                 .ThrottleFrame(3)
                 // .Where(x => x)
                 .Subscribe(OnStableGrounded);
-        }
 
-        void OnStableGrounded(bool onGround)
-        {
-            animator.SetBool(isInAir, onGround);
-        }
+            Observable.EveryUpdate()
+                .Where(e => Input.GetKeyDown(jumpKey))
+                .Subscribe(e =>
+                {
+                    OnJumpKeyDown.Invoke();
+                });
 
-        void ValidateGround()
-        {
-            if (Physics.Raycast(transform.position + Vector3.up * 0.02f, Vector3.down, groundTestRayLength, groundLayerMask))
+            Observable.EveryUpdate()
+                .Where(e => Input.GetKeyUp(jumpKey))
+                .Subscribe(e =>
+                {
+                    OnJumpKeyUp.Invoke();
+                });
+
+            
+            // instancing material
+            foreach (Renderer meshRenderer in renderers)
             {
-                isGrounded = true;
+                var instances = new Material[meshRenderer.sharedMaterials.Length];
+                for (int i = 0; i < meshRenderer.sharedMaterials.Length; i++)
+                {
+                    instances[i] = Instantiate(meshRenderer.sharedMaterials[i]);
+                }
+
+                meshRenderer.sharedMaterials = instances;
+            }
+        }
+
+        void OnJumpStart()
+        {
+            if (isJumping)
+            {
+                return;
+            }
+            
+            rigidBody.AddForce(Vector3.up * forcePowerDebug);
+            isJumping = true;
+        }
+
+        void OnJumpEnded()
+        {
+            if (!isJumping)
+            {
                 return;
             }
 
+            isJumping = false;
+        }
+
+        bool checker = false;
+
+        void OnStableGrounded(bool onGround)
+        {
+            if (onGround && !checker)
+            {
+                checker = true;
+                Debug.Log("Checked");
+                return;
+            }
+            
+            animator.SetBool(isInAir, !onGround);
+        }
+
+        Color color;
+        static readonly int color1 = Shader.PropertyToID("_Color");
+
+        void ValidateGround()
+        {
+            Debug.DrawRay(transform.position, Vector3.down * groundTestRayLength);
+            
+            estimatedPosition.transform.position = transform.position + rigidBody.velocity * (Time.fixedDeltaTime * 2);
+            
+            if (Physics.Raycast(transform.position + Vector3.up * 0.02f, Vector3.down, groundTestRayLength, groundLayerMask))
+            {
+                isGrounded = true;
+                color = Color.red;
+
+                return;
+            }
+
+            color = Color.green;
             isGrounded = false;
+        }
+
+        void Update()
+        {
+            Debug.DrawRay(transform.position, Vector3.down * groundTestRayLength, color);
+            
+            foreach (Renderer render in renderers)
+            {
+                foreach (Material material in render.sharedMaterials)
+                {
+                    material.SetColor(color1, color);
+                }
+            }
         }
 
         void FixedUpdate()
         {
-            ValidateGround();
-            
-            if (isDebugMode)
-            {
-                if (isInAirDebug)
-                {
-                    rigidBody.AddForce(Vector3.up * forcePowerDebug);
-                    animator.SetBool(isInAir, isInAirDebug);
-                }
-
-                animator.SetFloat(speedRatio, speedDebug / maxSpeed);
-                return;
-            }
-            
             currentSpeed = rigidBody.velocity.magnitude;
+            
+            ValidateGround();
+
             animator.SetFloat(speedRatio, currentSpeed / maxSpeed);
         }
 

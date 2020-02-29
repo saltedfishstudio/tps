@@ -9,6 +9,9 @@
             <e p="Animation" t="Include">
               <e p="ThirdPersonAnimationController.cs" t="Include" />
             </e>
+            <e p="CameraBoom.cs" t="Include" />
+            <e p="ECollisionChannel.cs" t="Include" />
+            <e p="SpringFollow.cs" t="Include" />
           </e>
         </e>
         <e p="Source" t="Include">
@@ -30,7 +33,9 @@
                 <e p="EngineBaseTypes.cs" t="Include" />
                 <e p="EngineTypes.cs" t="Include" />
                 <e p="Epic.Engine.GameFramework.asmdef" t="Include" />
+                <e p="FComponentSocketDescription.cs" t="Include" />
                 <e p="FTickFunction.cs" t="Include" />
+                <e p="FTransform.cs" t="Include" />
                 <e p="INavAgentInterface.cs" t="Include" />
                 <e p="IPathFollowingAgentInterface.cs" t="Include" />
                 <e p="UActorComponent.cs" t="Include" />
@@ -38,6 +43,8 @@
                 <e p="UMovementComponent.cs" t="Include" />
                 <e p="UNavMovementComponent.cs" t="Include" />
                 <e p="UPawnMovementComponent.cs" t="Include" />
+                <e p="USceneComponent.cs" t="Include" />
+                <e p="USpringArm.cs" t="Include" />
               </e>
             </e>
           </e>

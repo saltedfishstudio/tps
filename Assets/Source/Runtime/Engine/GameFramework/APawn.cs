@@ -34,5 +34,10 @@ namespace Epic.Engine.GameFramework
         {
             get => null;
         }
+
+        public Quaternion GetViewRotation()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
