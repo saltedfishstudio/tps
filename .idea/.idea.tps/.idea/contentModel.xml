@@ -11,6 +11,7 @@
             </e>
             <e p="CameraBoom.cs" t="Include" />
             <e p="Character.cs" t="Include" />
+            <e p="CursorManager.cs" t="Include" />
             <e p="ECollisionChannel.cs" t="Include" />
             <e p="OnScreenDisplay.cs" t="Include" />
             <e p="SpringFollow.cs" t="Include" />
@@ -54,10 +55,20 @@
       </e>
       <e p="Epic.Core.csproj" t="IncludeRecursive" />
       <e p="Epic.Engine.GameFramework.csproj" t="IncludeRecursive" />
+      <e p="LocalPackages" t="Include">
+        <e p="com.unity.render-pipelines.high-definition-config" t="Include">
+          <e p="Runtime" t="Include">
+            <e p="ShaderConfig.cs" t="Include" />
+            <e p="ShaderConfig.cs.hlsl" t="Include" />
+            <e p="Unity.RenderPipelines.HighDefinition.Config.Runtime.asmdef" t="Include" />
+          </e>
+        </e>
+      </e>
       <e p="obj" t="ExcludeRecursive" />
       <e p="Packages" t="ExcludeRecursive" />
       <e p="Temp\bin" t="ExcludeRecursive" />
       <e p="tps.sln" t="IncludeFlat" />
+      <e p="Unity.RenderPipelines.HighDefinition.Config.Runtime.csproj" t="IncludeRecursive" />
     </e>
     <e p="C:\Users\J-DT\.Rider2019.3\system\extResources" t="IncludeRecursive" />
     <e p="C:\Users\J-DT\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_tps.1949932018.00" t="ExcludeRecursive" />

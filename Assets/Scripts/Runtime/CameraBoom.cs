@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace TPS
 {
@@ -35,22 +36,36 @@ namespace TPS
                 probe.isTrigger = true;
             }
 
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            
-            transform.localPosition = target.transform.position + targetOffset;
         }
 
         void Update()
         {
-            mouseX = Input.GetAxis(xAxisBinding);
-            mouseY = Input.GetAxis(yAxisBinding);
+            GetMouseAxisInput();
             
+            transform.localPosition = target.transform.position + targetOffset;
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles +
                                                   new Vector3(-mouseY * mouseYControl, mouseX * mouseXControl, 0));
             
             targetCamera.transform.localRotation = Quaternion.identity;
             targetCamera.transform.localPosition = Vector3.forward * GetDesiredArmLength();
+        }
+
+        void GetMouseAxisInput()
+        {
+            if (!CursorManager.IsAvailable)
+            {
+                InitializeAxisInputInternal();
+                return;
+            }
+            
+            mouseX = Input.GetAxis(xAxisBinding);
+            mouseY = Input.GetAxis(yAxisBinding);
+        }
+
+        void InitializeAxisInputInternal()
+        {
+            mouseX = 0;
+            mouseY = 0;
         }
 
         float GetDesiredArmLength()

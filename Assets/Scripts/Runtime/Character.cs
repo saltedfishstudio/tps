@@ -35,8 +35,7 @@ namespace TPS
 
 		void Update()
 		{
-			horizontalValue = Input.GetAxis(horizontalBinding);
-			verticalValue = Input.GetAxis(verticalBinding);
+			GetKeyboardAxisInput();
 		}
 
 		void FixedUpdate()
@@ -63,6 +62,24 @@ namespace TPS
 
 			currentSpeed = rigidBody.velocity.magnitude;
 			animator.SetFloat(speedHash, currentSpeed / maxSpeed);
+		}
+
+		void GetKeyboardAxisInput()
+		{
+			if (!CursorManager.IsAvailable)
+			{
+				InitializeKeyboardInputInternal();
+				return;
+			}
+			
+			horizontalValue = Input.GetAxis(horizontalBinding);
+			verticalValue = Input.GetAxis(verticalBinding);
+		}
+
+		void InitializeKeyboardInputInternal()
+		{
+			horizontalValue = 0;
+			verticalValue = 0;
 		}
 	}
 }
