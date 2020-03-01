@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TPS
 {
@@ -27,20 +26,19 @@ namespace TPS
 
         void Awake()
         {
+            probe = targetCamera.GetComponent<SphereCollider>();
+            probe.enabled = useProbe;
+            
             if (useProbe)
             {
-                probe = targetCamera.GetComponent<SphereCollider>();
-                if (probe == null)
-                {
-                    probe = targetCamera.gameObject.AddComponent<SphereCollider>();
-                }
-
                 probe.radius = probeSize;
                 probe.isTrigger = true;
             }
 
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+            
+            transform.localPosition = target.transform.position + targetOffset;
         }
 
         void Update()
@@ -48,25 +46,18 @@ namespace TPS
             mouseX = Input.GetAxis(xAxisBinding);
             mouseY = Input.GetAxis(yAxisBinding);
             
-            transform.localPosition = target.transform.position + targetOffset;
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles +
-                                                  new Vector3(-mouseY * mouseYControl, (mouseX * mouseXControl), 0));
+                                                  new Vector3(-mouseY * mouseYControl, mouseX * mouseXControl, 0));
             
-            targetCamera.transform.SetParent(transform);
             targetCamera.transform.localRotation = Quaternion.identity;
-            targetCamera.transform.localPosition = Vector3.forward * -2;
-            targetCamera.transform.SetParent(null);
+            targetCamera.transform.localPosition = Vector3.forward * GetDesiredArmLength();
         }
 
-        void OnGUI()
+        float GetDesiredArmLength()
         {
-            GUI.TextField(
-                new Rect(
-                    padding.x, 
-                    padding.y, 
-                    400, 
-                    20)
-                , $"x:{mouseX}, y:{mouseY}");
+            // @todo::probe collide에 따라 targetArmLength 줄이기 구현 
+            
+            return -targetArmLength;
         }
     }
 }

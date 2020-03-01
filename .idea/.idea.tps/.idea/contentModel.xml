@@ -12,6 +12,7 @@
             <e p="CameraBoom.cs" t="Include" />
             <e p="Character.cs" t="Include" />
             <e p="ECollisionChannel.cs" t="Include" />
+            <e p="OnScreenDisplay.cs" t="Include" />
             <e p="SpringFollow.cs" t="Include" />
           </e>
         </e>

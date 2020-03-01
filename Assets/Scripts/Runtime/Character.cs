@@ -1,30 +1,29 @@
-﻿using System;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TPS
 {
 	public class Character : MonoBehaviour
 	{
-		[SerializeField] GameObject cameraBoom;
+		[SerializeField] CameraBoom cameraBoom;
 		[SerializeField] Rigidbody rigidBody;
 		[SerializeField] Animator animator;
+		
 		[SerializeField] float turnSpeed = 10;
-		[SerializeField] float speed = 10;
+		[SerializeField] float maxSpeed = 6;
+		[SerializeField] float threshold = 0.1f;
 		
 		const string horizontalBinding = "Horizontal";
 		const string verticalBinding = "Vertical";
 
+		static readonly int speedHash = Animator.StringToHash("Speed");
+		
 		float horizontalValue;
 		float verticalValue;
 
-		[SerializeField]
-		float threshold = 0.1f;
 		float yDirection;
-		static readonly int speedHash = Animator.StringToHash("Speed");
 		float currentSpeed;
 		
-		Quaternion GetForwardVector()
+		Quaternion GetForwardDirection()
 		{
 			if (cameraBoom)
 			{
@@ -38,44 +37,32 @@ namespace TPS
 		{
 			horizontalValue = Input.GetAxis(horizontalBinding);
 			verticalValue = Input.GetAxis(verticalBinding);
-
 		}
 
 		void FixedUpdate()
 		{
+			// float angle = Vector3.Angle(transform.forward, new Vector3(cameraBoom.GetCameraForward().x,0,cameraBoom.GetCameraForward().z));
+			// float angle2 = GetForwardDirection().eulerAngles.y;
+			
 			if (Mathf.Abs(horizontalValue) > threshold
 			    || Mathf.Abs(verticalValue) > threshold)
 			{
+				
 				float atanRad = Mathf.Atan2(verticalValue, horizontalValue);
 				float atan = atanRad * 57.2958f;
-				yDirection = -(atan - 90f) + 60f;
+				yDirection = -(atan - 90f) + GetForwardDirection().eulerAngles.y;
 				
-				rigidBody.MoveRotation(Quaternion.Slerp(rigidBody.rotation, Quaternion.Euler(new Vector3(0, yDirection + GetForwardVector().eulerAngles.y, 0)),
+				rigidBody.MoveRotation(Quaternion.Slerp(rigidBody.rotation, Quaternion.Euler(new Vector3(0, yDirection, 0)),
 					Time.fixedDeltaTime * turnSpeed));
 
 				Vector3 movement = transform.forward *
-				                   (new Vector2(horizontalValue, verticalValue).magnitude * speed * Time.fixedDeltaTime);
+				                   (new Vector2(horizontalValue, verticalValue).magnitude * maxSpeed);
 
-				// Apply this movement to the rigidbody's position.
-				rigidBody.MovePosition(rigidBody.position + movement);
-				
-				// rigidBody.velocity =
+				rigidBody.velocity = movement;
 			}
 
-			Debug.Log($"{rigidBody.velocity.magnitude:N5}");
 			currentSpeed = rigidBody.velocity.magnitude;
-			animator.SetFloat(speedHash, currentSpeed);
-		}
-		
-		void OnGUI()
-		{
-			GUI.TextField(
-				new Rect(
-					20, 
-					40, 
-					400, 
-					20)
-				, $"h:{horizontalValue:N2}, v:{verticalValue:N2}, s:{currentSpeed:N2}");
+			animator.SetFloat(speedHash, currentSpeed / maxSpeed);
 		}
 	}
 }
