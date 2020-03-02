@@ -36,6 +36,7 @@
             <e p="Character.cs" t="Include" />
             <e p="CursorManager.cs" t="Include" />
             <e p="ECollisionChannel.cs" t="Include" />
+            <e p="InputComponent.cs" t="Include" />
             <e p="OnScreenDisplay.cs" t="Include" />
             <e p="SpringFollow.cs" t="Include" />
           </e>

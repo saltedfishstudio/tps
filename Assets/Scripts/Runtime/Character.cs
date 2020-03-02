@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace TPS
 {
-	public class Character : MonoBehaviour
+	public class Character : MonoBehaviour, IInputComponent
 	{
 		[SerializeField] CameraBoom cameraBoom;
 		[SerializeField] Rigidbody rigidBody;
@@ -33,9 +34,11 @@ namespace TPS
 			return transform.rotation;
 		}
 
-		void Update()
+		void Awake()
 		{
-			GetKeyboardAxisInput();
+			InitializeInputValue();
+			
+			InputComponent.Register(this);
 		}
 
 		void FixedUpdate()
@@ -46,7 +49,6 @@ namespace TPS
 			if (Mathf.Abs(horizontalValue) > threshold
 			    || Mathf.Abs(verticalValue) > threshold)
 			{
-				
 				float atanRad = Mathf.Atan2(verticalValue, horizontalValue);
 				float atan = atanRad * 57.2958f;
 				yDirection = -(atan - 90f) + GetForwardDirection().eulerAngles.y;
@@ -64,19 +66,34 @@ namespace TPS
 			animator.SetFloat(speedHash, currentSpeed / maxSpeed);
 		}
 
-		void GetKeyboardAxisInput()
+		void OnDestroy()
 		{
-			if (!CursorManager.IsAvailable)
-			{
-				InitializeKeyboardInputInternal();
-				return;
-			}
-			
-			horizontalValue = Input.GetAxis(horizontalBinding);
-			verticalValue = Input.GetAxis(verticalBinding);
+			InputComponent.Release(this);
 		}
 
-		void InitializeKeyboardInputInternal()
+		void IInputComponent.BindInput()
+		{
+			InputComponent.BindAxis(horizontalBinding, this, MoveRight);
+			InputComponent.BindAxis(verticalBinding, this, MoveForward);
+		}
+		
+		void IInputComponent.ReleaseInput()
+		{
+			InputComponent.UnbindAxis(horizontalBinding, this, MoveRight);
+			InputComponent.UnbindAxis(verticalBinding, this, MoveForward);
+		}
+
+		void MoveForward(float value)
+		{
+			verticalValue = value;
+		}
+
+		void MoveRight(float value)
+		{
+			horizontalValue = value;
+		}
+
+		protected void  InitializeInputValue()
 		{
 			horizontalValue = 0;
 			verticalValue = 0;

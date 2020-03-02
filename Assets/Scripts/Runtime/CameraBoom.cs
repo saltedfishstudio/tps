@@ -3,29 +3,69 @@ using UnityEngine;
 
 namespace TPS
 {
-    public class CameraBoom : MonoBehaviour
+    public class CameraBoom : MonoBehaviour, IInputComponent
     {
-        [SerializeField] Camera targetCamera;
-        [SerializeField] GameObject target;
+        [Header("Component")] 
+        [SerializeField] Camera targetCamera = default;
+        [SerializeField] GameObject target = default;
 
+        [Header("Setting")]
         [SerializeField] float targetArmLength = 3f;
         [SerializeField] float mouseXControl = 2.0f;
         [SerializeField] float mouseYControl = 2.0f;
-
-        [SerializeField] bool useProbe = true;
-        [SerializeField] public float probeSize = .12f;
-        
         [SerializeField] Vector3 targetOffset = new Vector3(0, 0.97f, 0);
-        
+
+        [Header("Probe")]
+        [SerializeField] bool useProbe = true;
+        [SerializeField] float probeSize = .12f;
+
+        #region Internal
+
+        /// <summary>
+        /// sphere collider on camera gameObject to validate spring arm length.
+        /// </summary>
         SphereCollider probe;
+        
+        /// <summary>
+        /// cached mouse x axis value
+        /// </summary>
         float mouseX;
+        
+        /// <summary>
+        /// cached mouse y axis value
+        /// </summary>
         float mouseY;
-        readonly Vector2 padding = new Vector2(20,20);
 
         const string xAxisBinding = "Mouse X";
         const string yAxisBinding = "Mouse Y";
+        
+        #endregion
 
-        void Awake()
+        protected void Awake()
+        {
+            SetupProbe();
+            InitializeInputValue();
+            
+            InputComponent.Register(this);
+        }
+
+        protected void Update()
+        {
+            ProcessSpringArm();
+        }
+
+        void OnDestroy()
+        {
+            InputComponent.Release(this);
+        }
+
+        protected void InitializeInputValue()
+        {
+            mouseX = 0;
+            mouseY = 0;
+        }
+
+        void SetupProbe()
         {
             probe = targetCamera.GetComponent<SphereCollider>();
             probe.enabled = useProbe;
@@ -35,37 +75,38 @@ namespace TPS
                 probe.radius = probeSize;
                 probe.isTrigger = true;
             }
-
         }
 
-        void Update()
+        void IInputComponent.BindInput()
         {
-            GetMouseAxisInput();
-            
+            InputComponent.BindAxis(xAxisBinding, this, Turn);
+            InputComponent.BindAxis(yAxisBinding, this, LookUp);
+        }
+
+        void IInputComponent.ReleaseInput()
+        {
+            InputComponent.UnbindAxis(xAxisBinding, this, Turn);
+            InputComponent.UnbindAxis(yAxisBinding, this, LookUp);
+        }
+
+        void Turn(float value)
+        {
+            mouseX = value;
+        }
+
+        void LookUp(float value)
+        {
+            mouseY = value;
+        }
+
+        void ProcessSpringArm()
+        {
             transform.localPosition = target.transform.position + targetOffset;
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles +
                                                   new Vector3(-mouseY * mouseYControl, mouseX * mouseXControl, 0));
             
             targetCamera.transform.localRotation = Quaternion.identity;
             targetCamera.transform.localPosition = Vector3.forward * GetDesiredArmLength();
-        }
-
-        void GetMouseAxisInput()
-        {
-            if (!CursorManager.IsAvailable)
-            {
-                InitializeAxisInputInternal();
-                return;
-            }
-            
-            mouseX = Input.GetAxis(xAxisBinding);
-            mouseY = Input.GetAxis(yAxisBinding);
-        }
-
-        void InitializeAxisInputInternal()
-        {
-            mouseX = 0;
-            mouseY = 0;
         }
 
         float GetDesiredArmLength()
