@@ -48,6 +48,11 @@ namespace TPS
 			ExecuteTouchMap();
 		}
 
+		void OnMouseDown()
+		{
+			Debug.Log($"On Mouse Down : {DateTime.Now}");
+		}
+
 		void ExecuteActionMap()
 		{
 			foreach (string actionName in actionMap.Keys)

@@ -5,13 +5,19 @@ namespace TPS
 {
 	public class Character : MonoBehaviour, IInputComponent
 	{
-		[SerializeField] CameraBoom cameraBoom;
-		[SerializeField] Rigidbody rigidBody;
-		[SerializeField] Animator animator;
+		[Header("Component")] 
+		[SerializeField] CameraBoom cameraBoom = default;
+		[SerializeField] Rigidbody rigidBody = default;
+		[SerializeField] Animator animator = default;
 		
+		[Header("Setting")]
 		[SerializeField] float turnSpeed = 10;
 		[SerializeField] float maxSpeed = 6;
 		[SerializeField] float threshold = 0.1f;
+
+		[Header("Debug Option")]
+		[SerializeField] bool useVelocity = true;
+		[SerializeField] float forceValue = 10f;
 		
 		const string horizontalBinding = "Horizontal";
 		const string verticalBinding = "Vertical";
@@ -23,16 +29,6 @@ namespace TPS
 
 		float yDirection;
 		float currentSpeed;
-		
-		Quaternion GetForwardDirection()
-		{
-			if (cameraBoom)
-			{
-				return cameraBoom.transform.localRotation;
-			}
-
-			return transform.rotation;
-		}
 
 		void Awake()
 		{
@@ -43,8 +39,7 @@ namespace TPS
 
 		void FixedUpdate()
 		{
-			// float angle = Vector3.Angle(transform.forward, new Vector3(cameraBoom.GetCameraForward().x,0,cameraBoom.GetCameraForward().z));
-			// float angle2 = GetForwardDirection().eulerAngles.y;
+			Vector3 movement = Vector3.zero;
 			
 			if (Mathf.Abs(horizontalValue) > threshold
 			    || Mathf.Abs(verticalValue) > threshold)
@@ -56,14 +51,13 @@ namespace TPS
 				rigidBody.MoveRotation(Quaternion.Slerp(rigidBody.rotation, Quaternion.Euler(new Vector3(0, yDirection, 0)),
 					Time.fixedDeltaTime * turnSpeed));
 
-				Vector3 movement = transform.forward *
+				movement = transform.forward *
 				                   (new Vector2(horizontalValue, verticalValue).magnitude * maxSpeed);
 
-				rigidBody.velocity = movement;
+				rigidBody.MovePosition(rigidBody.transform.position + movement * Time.fixedDeltaTime);
 			}
 
-			currentSpeed = rigidBody.velocity.magnitude;
-			animator.SetFloat(speedHash, currentSpeed / maxSpeed);
+			animator.SetFloat(speedHash, movement.magnitude / maxSpeed);
 		}
 
 		void OnDestroy()
@@ -97,6 +91,16 @@ namespace TPS
 		{
 			horizontalValue = 0;
 			verticalValue = 0;
+		}
+				
+		Quaternion GetForwardDirection()
+		{
+			if (cameraBoom)
+			{
+				return cameraBoom.transform.localRotation;
+			}
+
+			return transform.rotation;
 		}
 	}
 }
