@@ -32,12 +32,12 @@
             <e p="Animation" t="Include">
               <e p="ThirdPersonAnimationController.cs" t="Include" />
             </e>
-            <e p="CameraBoom.cs" t="Include" />
             <e p="Character.cs" t="Include" />
             <e p="CursorManager.cs" t="Include" />
             <e p="ECollisionChannel.cs" t="Include" />
-            <e p="InputComponent.cs" t="Include" />
+            <e p="InputModule.cs" t="Include" />
             <e p="OnScreenDisplay.cs" t="Include" />
+            <e p="SpringArm.cs" t="Include" />
             <e p="SpringFollow.cs" t="Include" />
           </e>
         </e>

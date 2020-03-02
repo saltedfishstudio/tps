@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TPS
 {
-	public sealed class InputComponent : MonoBehaviour
+	public sealed class InputModule : MonoBehaviour
 	{
 		static Dictionary<string, Dictionary<EInputEvent, Action>> actionMap =
 			new Dictionary<string, Dictionary<EInputEvent, Action>>();
@@ -17,8 +17,13 @@ namespace TPS
 		[SerializeField] EUnityEvent BindTiming = EUnityEvent.UE_Start;
 		[SerializeField] EUnityEvent ReleaseTiming = EUnityEvent.UE_Start;
 
+		bool IsConfigured = false;
+		[SerializeField] bool getInput = true;
+		
 		void Awake()
 		{
+			if (IsConfigured) return;
+			
 			if (BindTiming == EUnityEvent.UE_Awake)
 			{
 				SetUpPlayerInput();
@@ -27,6 +32,8 @@ namespace TPS
 
 		void Start()
 		{
+			if (IsConfigured) return;
+			
 			if (BindTiming == EUnityEvent.UE_Start)
 			{
 				SetUpPlayerInput();
@@ -35,6 +42,8 @@ namespace TPS
 
 		void OnEnable()
 		{
+			if (IsConfigured) return;
+			
 			if (BindTiming == EUnityEvent.UE_OnEnable)
 			{
 				SetUpPlayerInput();
@@ -43,14 +52,12 @@ namespace TPS
 
 		void Update()
 		{
+			if (!getInput)
+				return;
+			
 			ExecuteActionMap();
 			ExecuteAxisMap();
 			ExecuteTouchMap();
-		}
-
-		void OnMouseDown()
-		{
-			Debug.Log($"On Mouse Down : {DateTime.Now}");
 		}
 
 		void ExecuteActionMap()
@@ -91,6 +98,8 @@ namespace TPS
 			{
 				component.BindInput();
 			}
+			
+			IsConfigured = true;
 		}
 
 		bool ConvertInput(EInputEvent keyEvent, string keyName)
@@ -98,10 +107,10 @@ namespace TPS
 			switch (keyEvent)
 			{
 				case EInputEvent.IE_Pressed:
-					return Input.GetKeyDown(keyName);
+					return Input.GetButtonDown(keyName);
 				
 				case EInputEvent.IE_Released:
-					return Input.GetKeyUp(keyName);
+					return Input.GetButtonUp(keyName);
 
 				case EInputEvent.IE_Repeat:
 					break;

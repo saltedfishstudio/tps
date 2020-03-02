@@ -301,6 +301,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
+    - Color_A2FF15BB: {r: 0.3584906, g: 0.3537117, b: 0.3500356, a: 1}
     - Vector4_6327E5B1: {r: 0.65098, g: 0.603922, b: 0.560784, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}

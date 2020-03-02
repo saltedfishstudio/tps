@@ -1,9 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TPS
 {
-    public class CameraBoom : MonoBehaviour, IInputComponent
+    public class SpringArm : MonoBehaviour, IInputComponent
     {
         [Header("Component")] 
         [SerializeField] Camera targetCamera = default;
@@ -38,6 +37,7 @@ namespace TPS
 
         const string xAxisBinding = "Mouse X";
         const string yAxisBinding = "Mouse Y";
+
         
         #endregion
 
@@ -46,7 +46,7 @@ namespace TPS
             SetupProbe();
             InitializeInputValue();
             
-            InputComponent.Register(this);
+            InputModule.Register(this);
         }
 
         protected void Update()
@@ -56,7 +56,7 @@ namespace TPS
 
         void OnDestroy()
         {
-            InputComponent.Release(this);
+            InputModule.Release(this);
         }
 
         protected void InitializeInputValue()
@@ -79,14 +79,15 @@ namespace TPS
 
         void IInputComponent.BindInput()
         {
-            InputComponent.BindAxis(xAxisBinding, this, Turn);
-            InputComponent.BindAxis(yAxisBinding, this, LookUp);
+            InputModule.BindAxis(xAxisBinding, this, Turn);
+            InputModule.BindAxis(yAxisBinding, this, LookUp);
+
         }
 
         void IInputComponent.ReleaseInput()
         {
-            InputComponent.UnbindAxis(xAxisBinding, this, Turn);
-            InputComponent.UnbindAxis(yAxisBinding, this, LookUp);
+            InputModule.UnbindAxis(xAxisBinding, this, Turn);
+            InputModule.UnbindAxis(yAxisBinding, this, LookUp);
         }
 
         void Turn(float value)
@@ -98,6 +99,7 @@ namespace TPS
         {
             mouseY = value;
         }
+
 
         void ProcessSpringArm()
         {
