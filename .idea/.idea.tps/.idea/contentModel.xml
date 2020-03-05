@@ -10,6 +10,15 @@
             <e p="LICENSE.txt" t="Include" />
           </e>
         </e>
+        <e p="RenderPipeline" t="Include">
+          <e p="Scripts" t="Include">
+            <e p="CloudSky.cs" t="Include" />
+            <e p="CloudSkyRenderer.cs" t="Include" />
+          </e>
+          <e p="Shaders" t="Include">
+            <e p="CloudSky.shader" t="Include" />
+          </e>
+        </e>
         <e p="Samples" t="Include">
           <e p="High Definition RP" t="Include">
             <e p="7.1.8" t="Include">
